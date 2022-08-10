@@ -7,11 +7,16 @@ const NewUser = ({setPage, registered }) => {
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [password, setPassword] = useState('')
-  const [height, setHeight] = useState('')
+  const [height, setHeight] = useState(0)
 
   const toggleView = () => {
     setEmail('')
     setPassword('')
+    setUsername('')
+    setFirstName('')
+    setLastName('')
+    setPassword('')
+    setHeight(0)
     view === 'new-user' ? setView('login') : setView('new-user')
   }
 

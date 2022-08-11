@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, Suspense } from 'react'
+import React, { } from 'react'
 import body from '../assets/icons/standing-human-body-silhouette-svgrepo-com.svg'
 
 function SideModal ({sideReady}) {

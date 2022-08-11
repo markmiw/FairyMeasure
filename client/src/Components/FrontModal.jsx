@@ -1,9 +1,8 @@
-import React, { useEffect, useState, useRef, Suspense } from 'react'
+import React, { } from 'react'
 import body from '../assets/icons/standing-human-body-silhouette-svgrepo-com.svg'
 
-
-function FrontModal ({frontReady}) {
-  setTimeout(frontReady, 5000);
+function FrontModal ({ frontReady }) {
+  setTimeout(frontReady, 5000)
   return (
     <div className="front-modal-container center-vert-horz" tabIndex="-1" role="dialog">
       <h1 className='front-modal-msg center-horz'>Please stand back so your whole body fits within the window</h1>

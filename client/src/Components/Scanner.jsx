@@ -36,22 +36,6 @@ function Scanner ({ humanHeight, username, setPage }) {
     }, 100)
   }
 
-  // const runSideBodysegment = async () => {
-  //   const net = await bodyPix.load({
-  //     architecture: 'ResNet50',
-  //     outputStride: 32,
-  //     quantBytes: 4
-  //   })
-
-  //   const interval = setInterval(() => {
-  //     if (!sComplete) {
-  //       detect(net)
-  //     } else {
-  //       clearInterval(interval)
-  //     }
-  //   }, 100)
-  // }
-
   const detect = async (net) => {
     if (
       typeof webcamRef.current !== 'undefined' &&
@@ -75,11 +59,6 @@ function Scanner ({ humanHeight, username, setPage }) {
         measurements.current.front.vWidth = videoWidth
         measurements.current.front.vHeight = videoHeight
         setStage('front-complete')
-
-        // else if (!sComplete) {
-        //   measurements.current.side = person
-        //   setSideComplete(true)
-        // }
       }
       drawCanvas(person.allPoses[0], video, videoWidth, videoHeight, canvasRef)
     }
@@ -100,39 +79,25 @@ function Scanner ({ humanHeight, username, setPage }) {
     setStage('front-scanning')
   }
 
-  // function sideReady () {
-  //   runSideBodysegment()
-  //   setSideReady(true)
-  // }
-
   function frontComplete () {
     let obj = calculate(measurements.current.front, humanHeight)
     obj.username = username
     obj.date = new Date()
-    debugger;
     axios.post('/measurements', obj).then((data) => {
       setPage('dashboard')
     }).catch((err) => {
       console.log(err)
     })
   }
-  // function sideComplete () {
-  //   setStage('side-complete')
-  // }
 
   return (
     <div className="scanner page-transition">
       {stage === 'initialize' ? <FrontModal frontReady={frontReady}/> : null}
       {stage === 'front-complete' ? <CompleteFrontModal frontComplete={frontComplete}/> : null}
-      {/* {stage === 'side-start' ? <SideModal sideReady={sideReady}/> : null}
-      {stage === 'side-complete' ? <CompleteSideModal sideComplete={sideComplete}/> : null} */}
       {stage !== 'front-complete'
         ? (<div className='webcam-container hidden'>
-      {/* <img className='front-body-overlay center-vert-horz' src={body}></img> */}
         <Webcam
           ref={webcamRef}
-          // minScreenshotHeight={videoH}
-          // minScreenshotWidth={videoW}
           className='cam center-vert-horz'
         />
         <canvas

@@ -1,7 +1,6 @@
-import React, { useEffect, useState, useRef, Suspense } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import Scanner from './Scanner.jsx'
 import NewUser from './NewUser.jsx'
-import fairy from '../assets/photos/fairy.jpeg'
 import Dashboard from './Dashboard.jsx'
 function App () {
   const [page, setPage] = useState('intro')
@@ -18,12 +17,9 @@ function App () {
     if (page === 'new-user') {
       return <NewUser registered={registered} setPage={setPage} setLogin={setLogin} setHumanHeight={setHumanHeight} />
     } else if (page === 'scanner') {
-      // return component here and pass setPage
-      // return <h1>Scanner Page</h1>
       return <Scanner humanHeight={humanHeight.current} username={login.current} setPage={setPage}/>
     } else if (page === 'dashboard') {
       return <Dashboard setPage={setPage} setLogin={setLogin} username={login.current} setHumanHeight={setHumanHeight}/>
-      // return dashboard
     }
     return (
       <div className='intro center-vert-horz'>
@@ -54,17 +50,6 @@ function App () {
   return (
     <div className="app">
       {renderPage()}
-        {/* {page==='intro'
-          ? (<div className='intro center-vert-horz'>
-              <div className='intro-text'>MeasureX</div>
-              <div className='intro-text'>The future of online body tracking</div>
-            </div>)
-          : (<>
-            <div className='login-container homepage-buttons'>
-              <span className='homepage-text'>Login</span>
-              <NewUser/>
-            </div>
-          </>)} */}
           {page !== 'dashboard'
             ? (<div className='app-name-container homepage-buttons'>
           <span onClick={(e) => homepage()}className='app-name'>Fairy Measure</span>
@@ -75,5 +60,3 @@ function App () {
 }
 
 export default App
-
-// {initialized.current ? (<Scanner videoH={videoH} videoW={videoW} humanHeight={178} />) : null}

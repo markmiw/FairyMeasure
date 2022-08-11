@@ -1,24 +1,22 @@
 import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
-
 function Dashboard ({ username, setPage, setHumanHeight, setLogin }) {
   const [userData, setUserData] = useState({})
   const firstName = useRef('')
   useEffect(() => {
     axios.get('/userinfo', { params: { username } }).then(({ data }) => {
       setHumanHeight(data.height)
-      firstName.current = data.firstName
+      firstName.current = data.firstName.toLowerCase()
+      const cap = firstName.current[0].toUpperCase()
+      firstName.current = cap + firstName.current.substring(1, firstName.current.length)
+
       axios.get('/measurements', { params: { username } }).then(({ data }) => {
         setUserData(data)
-        console.log(data)
       }).catch((err) => {
         console.log(err)
         alert('Error getting user information')
       })
     })
-    // axios.get('/measurements', { username }, (req, res) => {
-    //   debugger;
-    // })
   }, [])
   const logout = (e) => {
     e.preventDefault()
@@ -30,26 +28,39 @@ function Dashboard ({ username, setPage, setHumanHeight, setLogin }) {
   const createTable = () => {
     if (Object.keys(userData).length !== 0) {
       return (
-<div>
-      <nav className='nav'>
-      <div className='nav-left'>
+<div className='dashboard-page'>
+      {/* <nav className='nav'>
 <h1 className="h2 headers">Dashboard</h1>
-<p className='welcome headers'>Welcome back {firstName.current}</p>
-</div>
-        <div className='nav-right'>
-        <button onClick={(e) => { logout(e) }}>Logout</button>
-<button onClick={(e) => { setPage('scanner') }}>Scan</button>
-        </div>
-</nav>
-    <table className="table">
-    <caption>Face Measurements</caption>
+<p className='welcome headers'>Welcome back {firstName.current}!</p>
+  <p className='welcome headers' onClick={(e) => { setPage('scanner') }}>Scan</p>
+<p className='welcome headers' onClick={(e) => { logout(e) }}>Logout</p>
+</nav> */}
+
+<nav id="sidebarMenu" className="collapse d-lg-block sidebar collapse">
+              <div className="position-sticky">
+                <div className="list-group list-group-flush mx-3 mt-4">
+                  <a onClick={(e) => { setPage('dashboard') }} className="hover list-group-item list-group-item-action py-2 ripple" aria-current="true">
+                    <i></i><span>Dashboard</span>
+                  </a>
+                  <a onClick={(e) => { setPage('scanner') }} className="hover list-group-item list-group-item-action py-2 ripple"><i
+                  ></i><span>Scan</span></a>
+                  <a onClick={(e) => { logout(e) }} className="hover list-group-item list-group-item-action py-2 ripple"><i
+                  ></i><span>Logout</span></a>
+                </div>
+              </div>
+            </nav>
+
+<div className='table-container'>
+  <div className='card-temp'>
+  <p className='table-title'>Face Measurements</p>
+  <table className="table table-striped">
   <thead className="thead-dark">
     <tr>
       <th scope="col">#</th>
-      <th scope="col">Eyes</th>
-      <th scope="col">Left Face</th>
-      <th scope="col">Right Face</th>
-      <th scope="col">Face</th>
+      <th scope="col">{'Eyes [cm]'}</th>
+      <th scope="col">{'Left Face [cm]'}</th>
+      <th scope="col">{'Right Face [cm]'}</th>
+      <th scope="col">{'Face [cm]'}</th>
     </tr>
   </thead>
   <tbody>
@@ -66,15 +77,16 @@ function Dashboard ({ username, setPage, setHumanHeight, setLogin }) {
   })}
   </tbody>
 </table>
-
-<table className="table">
-    <caption>Torso Measurements</caption>
+  </div>
+  <div className='card-temp'>
+  <p className='table-title'>Torso Measurements</p>
+  <table className="table table-striped">
   <thead className="thead-dark">
     <tr>
       <th scope="col">#</th>
-      <th scope="col">Shoulder</th>
-      <th scope="col">Torso Back</th>
-      <th scope="col">Torso Front</th>
+      <th scope="col">{'Shoulder [cm]'}</th>
+      <th scope="col">{'Torso Back [cm]'}</th>
+      <th scope="col">{'Torso Front [cm]'}</th>
     </tr>
   </thead>
   <tbody>
@@ -90,17 +102,19 @@ function Dashboard ({ username, setPage, setHumanHeight, setLogin }) {
   })}
   </tbody>
 </table>
+  </div>
 
-<table className="table">
-    <caption>Left Arm Measurements</caption>
+<div className='card-temp'>
+<p className='table-title'>Left Arm Measurements</p>
+<table className="table table-striped">
   <thead className="thead-dark">
     <tr>
       <th scope="col">#</th>
-      <th scope="col">Hand</th>
-      <th scope="col">Lower Arm Back</th>
-      <th scope="col">Lower Arm Front</th>
-      <th scope="col">Upper Arm Back</th>
-      <th scope="col">Upper Arm Front</th>
+      <th scope="col">{'Hand [cm]'}</th>
+      <th scope="col">{'Lower Arm Back [cm]'}</th>
+      <th scope="col">{'Lower Arm Front [cm]'}</th>
+      <th scope="col">{'Upper Arm Back [cm]'}</th>
+      <th scope="col">{'Upper Arm Front [cm]'}</th>
     </tr>
   </thead>
   <tbody>
@@ -118,17 +132,19 @@ function Dashboard ({ username, setPage, setHumanHeight, setLogin }) {
   })}
   </tbody>
 </table>
+</div>
 
-<table className="table">
-    <caption>Right Arm Measurements</caption>
+<div className='card-temp'>
+<p className='table-title'>Right Arm Measurements</p>
+<table className="table table-striped">
   <thead className="thead-dark">
     <tr>
       <th scope="col">#</th>
-      <th scope="col">Hand</th>
-      <th scope="col">Lower Arm Back</th>
-      <th scope="col">Lower Arm Front</th>
-      <th scope="col">Upper Arm Back</th>
-      <th scope="col">Upper Arm Front</th>
+      <th scope="col">{'Hand [cm]'}</th>
+      <th scope="col">{'Lower Arm Back [cm]'}</th>
+      <th scope="col">{'Lower Arm Front [cm]'}</th>
+      <th scope="col">{'Upper Arm Back [cm]'}</th>
+      <th scope="col">{'Upper Arm Front [cm]'}</th>
     </tr>
   </thead>
   <tbody>
@@ -146,15 +162,17 @@ function Dashboard ({ username, setPage, setHumanHeight, setLogin }) {
   })}
   </tbody>
 </table>
+</div>
 
-<table className="table">
-    <caption>Left Leg Measurements</caption>
+<div className='card-temp'>
+  <p className='table-title'>Left Leg Measurements</p>
+<table className="table table-striped">
   <thead className="thead-dark">
     <tr>
       <th scope="col">#</th>
-      <th scope="col">Foot</th>
-      <th scope="col">Lower Leg Front</th>
-      <th scope="col">Upper Leg Front</th>
+      <th scope="col">{'Foot [cm]'}</th>
+      <th scope="col">{'Lower Leg Front [cm]'}</th>
+      <th scope="col">{'Upper Leg Front [cm]'}</th>
     </tr>
   </thead>
   <tbody>
@@ -170,15 +188,17 @@ function Dashboard ({ username, setPage, setHumanHeight, setLogin }) {
   })}
   </tbody>
 </table>
+</div>
 
-<table className="table">
-    <caption>Right Leg Measurements</caption>
+<div className='card-temp'>
+<p className='table-title'>Right Leg Measurements</p>
+<table className="table table-striped">
   <thead className="thead-dark">
     <tr>
       <th scope="col">#</th>
-      <th scope="col">Foot</th>
-      <th scope="col">Lower Leg Front</th>
-      <th scope="col">Upper Leg Front</th>
+      <th scope="col">{'Foot [cm]'}</th>
+      <th scope="col">{'Lower Leg Front [cm]'}</th>
+      <th scope="col">{'Upper Leg Front [cm]'}</th>
     </tr>
   </thead>
   <tbody>
@@ -195,11 +215,13 @@ function Dashboard ({ username, setPage, setHumanHeight, setLogin }) {
   </tbody>
 </table>
 </div>
+</div>
+</div>
       )
     }
   }
   return (
-    <div className={'dashboard'}>
+    <div className={'dashboard page-transition'}>
           {createTable()}
     </div>
   )

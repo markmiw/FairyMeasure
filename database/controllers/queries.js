@@ -1,16 +1,57 @@
-const Users = require('../models/UsersSchema.js');
+const {Users, Measurements} = require('../models/UsersSchema.js')
+exports.addUser = ({ username, firstName, lastName, password, email, height }) => {
+  return Users.create(
+    {
+      username: username,
+      firstName: firstName,
+      lastName: lastName,
+      password: password,
+      email: email,
+      height: height
+    }
+  )
+}
+exports.getUser = async (username) => {
+  return await Users.find({username}).lean()
+}
 
-const addUser = (obj) => {
-  return Users.create(obj);
-};
-module.exports = addUser;
+exports.getAllUsers = async (username) => {
+  return await Users.find({}).lean()
+}
 
-const addMeasurements = (obj) => {
-  return Users.create(obj);
-};
-module.exports = addMeasurements;
+exports.checkEmail = async (email) => {
+  return await Users.find({ email }).lean()
+}
 
-const removeMeasurements = (obj) => {
-  return Users.create(obj);
-};
-module.exports = removeMeasurements;
+exports.loginUser = async (username, password) => {
+  return await Users.find({ username: username, password:password }).lean()
+}
+
+exports.addMeasurements = (measurements) => {
+  return Measurements.create(measurements)
+}
+
+exports.getMeasurements = async (username) => {
+  return await Measurements.find(username).lean()
+}
+
+exports.getAllMeasurements = async () => {
+  return await Measurements.find({}).lean()
+}
+
+// const checkEmail = async (email) => {
+//   return await Users.find(email).exec();
+// }
+// module.exports = checkEmail;
+
+// module.exports = addUser;
+
+// const addMeasurements = (obj) => {
+//   return Users.create(obj);
+// };
+// module.exports = addMeasurements;
+
+// const removeMeasurements = (obj) => {
+//   return Users.create(obj);
+// };
+// module.exports = removeMeasurements;

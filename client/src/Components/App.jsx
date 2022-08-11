@@ -2,15 +2,13 @@ import React, { useEffect, useState, useRef, Suspense } from 'react'
 import Scanner from './Scanner.jsx'
 import NewUser from './NewUser.jsx'
 import fairy from '../assets/photos/fairy.jpeg'
+import Dashboard from './Dashboard.jsx'
 function App () {
-  const videoH = window.screen.availHeight
-  const videoW = window.screen.availWidth
-  const [initialize, setInitialize] = useState(false)
   const [page, setPage] = useState('intro')
   const humanHeight = useRef(null)
-  const [login, setLogin] = useState(false);
+  const login = useRef(null)
   const homepage = () => {
-    if (login) {
+    if (login.current !== null) {
       setPage('dashboard')
     } else {
       setPage('new-user')
@@ -18,12 +16,13 @@ function App () {
   }
   const renderPage = () => {
     if (page === 'new-user') {
-      return <NewUser registered={registered} setPage={setPage} />
+      return <NewUser registered={registered} setPage={setPage} setLogin={setLogin} setHumanHeight={setHumanHeight} />
     } else if (page === 'scanner') {
       // return component here and pass setPage
       // return <h1>Scanner Page</h1>
-      return <Scanner humanHeight={humanHeight.current}/>
+      return <Scanner humanHeight={humanHeight.current} username={login.current} setPage={setPage}/>
     } else if (page === 'dashboard') {
+      return <Dashboard setPage={setPage} setLogin={setLogin} username={login.current} setHumanHeight={setHumanHeight}/>
       // return dashboard
     }
     return (
@@ -34,6 +33,13 @@ function App () {
     )
   }
 
+  const setLogin = (username) => {
+    login.current = username
+  }
+
+  const setHumanHeight = (height) => {
+    humanHeight.current = height
+  }
   useEffect(() => {
     const timer = setTimeout(() => {
       setPage('new-user')
@@ -42,8 +48,8 @@ function App () {
   }, [])
 
   const registered = (height) => {
-    humanHeight.current = height;
-    setPage('scanner');
+    humanHeight.current = height
+    setPage('scanner')
   }
   return (
     <div className="app">
@@ -59,9 +65,11 @@ function App () {
               <NewUser/>
             </div>
           </>)} */}
-        <div className='app-name-container homepage-buttons'>
+          {page !== 'dashboard'
+            ? (<div className='app-name-container homepage-buttons'>
           <span onClick={(e) => homepage()}className='app-name'>Fairy Measure</span>
-        </div>
+        </div>)
+            : null}
     </div>
   )
 }

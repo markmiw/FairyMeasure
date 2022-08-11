@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import fairy from '../assets/photos/fairy.jpeg'
-const NewUser = ({setPage, registered }) => {
+import axios from 'axios'
+
+const NewUser = ({ setPage, registered, setLogin, setHumanHeight }) => {
   const [view, setView] = useState('new-user')
   const [email, setEmail] = useState('')
   const [username, setUsername] = useState('')
@@ -23,16 +25,117 @@ const NewUser = ({setPage, registered }) => {
   const onButtonClick = () => {
     // send backend api request to create new user
     // router to navigate to next step/page
-    registered(height);
+    registered(height)
   }
 
-  const signUp = () => {
-    setPage('dashboard');
+  const checkValid = () => {
+    let usernameTaken = false
+    let emailTaken = false
+    if (username.length < 6) {
+      alert('username must be at least 6 characters long')
+      return false
+    }
+    if (firstName.length < 1) {
+      alert('first name is required')
+      return false
+    }
+    if (lastName.length < 1) {
+      alert('last name is required')
+      return false
+    }
+    if (password.length < 7) {
+      alert('password must be more than 7 characters')
+      return false
+    }
+    if (email.length < 1) {
+      alert('email field is empty, input valid email')
+      return false
+    }
+    if (height < 60 || height > 275) {
+      alert('height must be valid')
+      return false
+    }
+    const regex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}')
+    if (!regex.test(email)) {
+      alert('email is not valid')
+      return false
+    }
+    axios.get('/username', { params: { username } }).then(({ data }) => {
+      if (data) {
+        usernameTaken = true
+      }
+    }).catch((err) => {
+      console.log(err)
+    })
+    if (usernameTaken) {
+      alert('username is already taken')
+      return false
+    }
+
+    axios.get('/email', { params: { email } }).then(({ data }) => {
+      if (data) {
+        emailTaken = true
+      }
+    }).catch((err) => {
+      console.log(err)
+    })
+
+    if (emailTaken) {
+      alert('email is already taken')
+      return false
+    } else {
+      return true
+    }
+  }
+  const signUp = (e) => {
+    e.preventDefault()
+    if (checkValid()) {
+      const user = {
+        email,
+        username,
+        firstName,
+        lastName,
+        password,
+        height: Number(height)
+      }
+      axios.post('/newuser', user).then((data) => {
+        console.log('made new user');
+        setLogin(username)
+        setHumanHeight(height)
+        setPage('scanner')
+      }).catch((err) => {
+        console.log(err)
+        alert('Error signing up')
+      })
+    }
   }
 
-  const login = () => {
-    setPage('dashboard');
+  function login (e) {
+    e.preventDefault()
+    const params = { params: { username, password } }
+    axios.get('/login', params).then(({ data }) => {
+      if (data) {
+        setLogin(username)
+        setPage('dashboard')
+      } else {
+        alert('incorrect username or password')
+      }
+    }).catch((err) => {
+      console.log(err)
+    })
   }
+
+  // const login = () => {
+  //   axios.get('/login', { params: { username, password } }, (req, res) => {
+  //     debugger
+  //     if (res.data) {
+  //       setLogin(username)
+  //       setPage('dashboard')
+  //     } else {
+  //       alert('invalid id or password')
+  //     }
+  //   })
+  // }
   return (
     <div className='new-user-container page-transition'>
       <div className='new-user-form center-vert'>
@@ -56,9 +159,9 @@ const NewUser = ({setPage, registered }) => {
             <div className="login-page center-vert-horz">
   <div className="form">
     <form className="login-form">
-      <input onChange={(e) => setEmail(e.target.value)} type="text" placeholder="username"/>
-      <input onChange={(e) => setPassword(e.target.value)} type="password" placeholder="password"/>
-      <button onClick={(e) => onButtonClick()}>login</button>
+      <input autoComplete="on" name="username" onChange={(e) => setUsername(e.target.value)} type="text" placeholder="username"/>
+      <input autoComplete="on" name="password" onChange={(e) => setPassword(e.target.value)} type="password" placeholder="password"/>
+      <button onClick={(e) => login(e)}>login</button>
       <p className="message">Not registered? <a href="#" onClick={toggleView}>Create an account</a></p>
     </form>
   </div>
@@ -79,13 +182,13 @@ const NewUser = ({setPage, registered }) => {
             <div className='login-page center-vert-horz'>
             <div className='form'>
             <form className="login-form">
-<input onChange={(e) => setUsername(e.target.value)} type="text" placeholder="username"/>
-<input onChange={(e) => setFirstName(e.target.value)} type="text" placeholder="first name"/>
-<input onChange={(e) => setLastName(e.target.value)} type="text" placeholder="last name"/>
-<input onChange={(e) => setPassword(e.target.value)} type="password" placeholder="password"/>
-<input onChange={(e) => setEmail(e.target.value)} type="text" placeholder="email address"/>
-<input onChange={(e) => setHeight(e.target.value)} type="number" placeholder="height in cm"/>
-<button>create</button>
+<input autoComplete="on" name="username" onChange={(e) => setUsername(e.target.value)} type="text" placeholder="username" />
+<input autoComplete="on" name="password" onChange={(e) => setPassword(e.target.value)} type="password" placeholder="password"/>
+<input autoComplete="on" name="firstName" onChange={(e) => setFirstName(e.target.value)} type="text" placeholder="first name"/>
+<input autoComplete="on" name="lastName" onChange={(e) => setLastName(e.target.value)} type="text" placeholder="last name"/>
+<input autoComplete="on" name="email" onChange={(e) => setEmail(e.target.value)} type="text" placeholder="email address"/>
+<input autoComplete="on" name="height" onChange={(e) => setHeight(e.target.value)} type="number" placeholder="height in cm"/>
+<button onClick={(e) => signUp(e)}>create</button>
 <p className="message">Already registered? <a href="#" onClick={toggleView}>Sign In</a></p>
 </form>
             </div>

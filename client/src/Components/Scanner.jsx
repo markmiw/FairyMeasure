@@ -8,9 +8,10 @@ import FrontModal from './FrontModal.jsx'
 // import SideModal from './SideModal.jsx'
 import CompleteFrontModal from './CompleteFrontModal.jsx'
 // import CompleteSideModal from './CompleteSideModal.jsx'
-import {calculate} from '../helpers/analysis.js';
+import { calculate } from '../helpers/analysis.js'
+import axios from 'axios'
 
-function Scanner ({humanHeight}) {
+function Scanner ({ humanHeight, username, setPage }) {
   const webcamRef = useRef(null)
   const canvasRef = useRef(null)
   const measurements = useRef({
@@ -22,7 +23,7 @@ function Scanner ({humanHeight}) {
   const runFrontBodysegment = async () => {
     const net = await bodyPix.load({
       architecture: 'ResNet50',
-      outputStride: 32,
+      outputStride: 16,
       quantBytes: 4
     })
 
@@ -69,10 +70,10 @@ function Scanner ({humanHeight}) {
         internalResolution: 'medium',
         segmentationThreshold: 0.7
       })
-      if (person.allPoses[0].score > 0.96) {
+      if (person.allPoses[0].score > 0.974) {
         measurements.current.front = person
-        measurements.current.front.vWidth = videoWidth;
-        measurements.current.front.vHeight = videoHeight;
+        measurements.current.front.vWidth = videoWidth
+        measurements.current.front.vHeight = videoHeight
         setStage('front-complete')
 
         // else if (!sComplete) {
@@ -94,9 +95,9 @@ function Scanner ({humanHeight}) {
   }
 
   function frontReady () {
-    runFrontBodysegment()
-    setStage('front-scanning')
     document.getElementsByClassName('webcam-container')[0].classList.remove('hidden')
+    setTimeout(runFrontBodysegment, 3000)
+    setStage('front-scanning')
   }
 
   // function sideReady () {
@@ -105,13 +106,19 @@ function Scanner ({humanHeight}) {
   // }
 
   function frontComplete () {
-    let obj = calculate(measurements.current.front, humanHeight);
-    setStage('front-complete')
+    let obj = calculate(measurements.current.front, humanHeight)
+    obj.username = username
+    obj.date = new Date()
+    debugger;
+    axios.post('/measurements', obj).then((data) => {
+      setPage('dashboard')
+    }).catch((err) => {
+      console.log(err)
+    })
   }
   // function sideComplete () {
   //   setStage('side-complete')
   // }
-
 
   return (
     <div className="scanner page-transition">

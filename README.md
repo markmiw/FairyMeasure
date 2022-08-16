@@ -29,5 +29,5 @@ Created an application that estimates body part measurements by scanning body pa
 ```
 $ cd FairyMeasure
 $ npm install
-$ npm run client-dev
-$ npm run server-dev
+$ npm run c
+$ npm run s

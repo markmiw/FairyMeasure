@@ -5,6 +5,7 @@ function Dashboard ({ username, setPage, setHumanHeight, setLogin }) {
   const firstName = useRef('')
   useEffect(() => {
     axios.get('/userinfo', { params: { username } }).then(({ data }) => {
+      debugger;
       setHumanHeight(data.height)
       firstName.current = data.firstName.toLowerCase()
       const cap = firstName.current[0].toUpperCase()

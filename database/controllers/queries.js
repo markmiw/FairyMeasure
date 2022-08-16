@@ -32,7 +32,7 @@ exports.addMeasurements = (measurements) => {
 }
 
 exports.getMeasurements = async (username) => {
-  return await Measurements.find(username).lean()
+  return await Measurements.find({"username": username}).lean()
 }
 
 exports.getAllMeasurements = async () => {

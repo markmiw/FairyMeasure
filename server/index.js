@@ -80,7 +80,7 @@ app.post('/measurements', (req, res) => {
 
 app.get('/measurements', (req, res) => {
   if (req.query.username) {
-    getMeasurements(req.body).then((data) => {
+    getMeasurements(req.query.username).then((data) => {
       res.status(201).send(data)
     }).catch((err) => {
       res.status(404).send(err)

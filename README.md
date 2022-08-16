@@ -21,8 +21,6 @@
 ## Overview
 Created an application that estimates body part measurements by scanning body parts through a webcam.
 
-[![Fairy Measure](https://img.youtube.com/vi/D9lcLZV3oPw/0.jpg)](https://www.youtube.com/watch?v=D9lcLZV3oPw)
-
 ## Accomplishments
 - Designed an automated body part measurement application using TensorFlow JS, React, MongoDB, and Bootstrap to provide users and relatable companies detailed measurements of ones body
 - Derived a methodology to estimate body parts by determining joint locations and general body part locations from Google’s BodyPix and Body Part Segmentation models.
@@ -33,3 +31,6 @@ $ cd FairyMeasure
 $ npm install
 $ npm run c
 $ npm run s
+
+## Youtube Link
+[![Fairy Measure](https://img.youtube.com/vi/D9lcLZV3oPw/0.jpg)](https://www.youtube.com/watch?v=D9lcLZV3oPw)

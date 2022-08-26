@@ -5,7 +5,6 @@ function Dashboard ({ username, setPage, setHumanHeight, setLogin }) {
   const firstName = useRef('')
   useEffect(() => {
     axios.get('/userinfo', { params: { username } }).then(({ data }) => {
-      debugger;
       setHumanHeight(data.height)
       firstName.current = data.firstName.toLowerCase()
       const cap = firstName.current[0].toUpperCase()
@@ -27,8 +26,7 @@ function Dashboard ({ username, setPage, setHumanHeight, setLogin }) {
   }
 
   const createTable = () => {
-    if (Object.keys(userData).length !== 0) {
-      return (
+    return (
 <div className='dashboard-page'>
       {/* <nav className='nav'>
 <h1 className="h2 headers">Dashboard</h1>
@@ -50,176 +48,176 @@ function Dashboard ({ username, setPage, setHumanHeight, setLogin }) {
                 </div>
               </div>
             </nav>
+            {Object.keys(userData).length !== 0
+              ? <div className='table-container'>
+              <div className='card-temp'>
+              <p className='table-title'>Face Measurements</p>
+              <table className="table table-striped">
+              <thead className="thead-dark">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">{'Eyes [cm]'}</th>
+                  <th scope="col">{'Left Face [cm]'}</th>
+                  <th scope="col">{'Right Face [cm]'}</th>
+                  <th scope="col">{'Face [cm]'}</th>
+                </tr>
+              </thead>
+              <tbody>
+              {userData.map((element, i) => {
+                return (
+                  <tr key={i}>
+                    <td>{i}</td>
+                    <td>{element.face.eyes.width.toFixed(2)}</td>
+                    <td>{element.face.left_face.width.toFixed(2)} / {element.face.left_face.height.toFixed(2)}</td>
+                    <td>{element.face.right_face.width.toFixed(2)} / {element.face.right_face.height.toFixed(2)}</td>
+                    <td>{element.face.width.toFixed(2)} / {element.face.height.toFixed(2)}</td>
+                  </tr>
+                )
+              })}
+              </tbody>
+            </table>
+              </div>
+              <div className='card-temp'>
+              <p className='table-title'>Torso Measurements</p>
+              <table className="table table-striped">
+              <thead className="thead-dark">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">{'Shoulder [cm]'}</th>
+                  <th scope="col">{'Torso Back [cm]'}</th>
+                  <th scope="col">{'Torso Front [cm]'}</th>
+                </tr>
+              </thead>
+              <tbody>
+              {userData.map((element, i) => {
+                return (
+                  <tr key={i}>
+                    <td>{i}</td>
+                    <td>{element.torso.shoulder.width.toFixed(2)}</td>
+                    <td>{element.torso.torso_back.width.toFixed(2)} / {element.torso.torso_back.height.toFixed(2)}</td>
+                    <td>{element.torso.torso_front.width.toFixed(2)} / {element.torso.torso_front.height.toFixed(2)}</td>
+                  </tr>
+                )
+              })}
+              </tbody>
+            </table>
+              </div>
 
-<div className='table-container'>
-  <div className='card-temp'>
-  <p className='table-title'>Face Measurements</p>
-  <table className="table table-striped">
-  <thead className="thead-dark">
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">{'Eyes [cm]'}</th>
-      <th scope="col">{'Left Face [cm]'}</th>
-      <th scope="col">{'Right Face [cm]'}</th>
-      <th scope="col">{'Face [cm]'}</th>
-    </tr>
-  </thead>
-  <tbody>
-  {userData.map((element, i) => {
-    return (
-      <tr key={i}>
-        <td>{i}</td>
-        <td>{element.face.eyes.width.toFixed(2)}</td>
-        <td>{element.face.left_face.width.toFixed(2)} / {element.face.left_face.height.toFixed(2)}</td>
-        <td>{element.face.right_face.width.toFixed(2)} / {element.face.right_face.height.toFixed(2)}</td>
-        <td>{element.face.width.toFixed(2)} / {element.face.height.toFixed(2)}</td>
-      </tr>
-    )
-  })}
-  </tbody>
-</table>
-  </div>
-  <div className='card-temp'>
-  <p className='table-title'>Torso Measurements</p>
-  <table className="table table-striped">
-  <thead className="thead-dark">
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">{'Shoulder [cm]'}</th>
-      <th scope="col">{'Torso Back [cm]'}</th>
-      <th scope="col">{'Torso Front [cm]'}</th>
-    </tr>
-  </thead>
-  <tbody>
-  {userData.map((element, i) => {
-    return (
-      <tr key={i}>
-        <td>{i}</td>
-        <td>{element.torso.shoulder.width.toFixed(2)}</td>
-        <td>{element.torso.torso_back.width.toFixed(2)} / {element.torso.torso_back.height.toFixed(2)}</td>
-        <td>{element.torso.torso_front.width.toFixed(2)} / {element.torso.torso_front.height.toFixed(2)}</td>
-      </tr>
-    )
-  })}
-  </tbody>
-</table>
-  </div>
+            <div className='card-temp'>
+            <p className='table-title'>Left Arm Measurements</p>
+            <table className="table table-striped">
+              <thead className="thead-dark">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">{'Hand [cm]'}</th>
+                  <th scope="col">{'Lower Arm Back [cm]'}</th>
+                  <th scope="col">{'Lower Arm Front [cm]'}</th>
+                  <th scope="col">{'Upper Arm Back [cm]'}</th>
+                  <th scope="col">{'Upper Arm Front [cm]'}</th>
+                </tr>
+              </thead>
+              <tbody>
+              {userData.map((element, i) => {
+                return (
+                  <tr key={i}>
+                    <td>{i}</td>
+                    <td>{element.arms.left_hand.width.toFixed(2)} / {element.arms.left_hand.height.toFixed(2)}</td>
+                    <td>{element.arms.left_lower_arm_back.width.toFixed(2)} / {element.arms.left_lower_arm_back.height.toFixed(2)}</td>
+                    <td>{element.arms.left_lower_arm_front.width.toFixed(2)} / {element.arms.left_lower_arm_front.height.toFixed(2)}</td>
+                    <td>{element.arms.left_upper_arm_back.width.toFixed(2)} / {element.arms.left_upper_arm_back.height.toFixed(2)}</td>
+                    <td>{element.arms.left_upper_arm_front.width.toFixed(2)} / {element.arms.left_upper_arm_front.height.toFixed(2)}</td>
+                  </tr>
+                )
+              })}
+              </tbody>
+            </table>
+            </div>
 
-<div className='card-temp'>
-<p className='table-title'>Left Arm Measurements</p>
-<table className="table table-striped">
-  <thead className="thead-dark">
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">{'Hand [cm]'}</th>
-      <th scope="col">{'Lower Arm Back [cm]'}</th>
-      <th scope="col">{'Lower Arm Front [cm]'}</th>
-      <th scope="col">{'Upper Arm Back [cm]'}</th>
-      <th scope="col">{'Upper Arm Front [cm]'}</th>
-    </tr>
-  </thead>
-  <tbody>
-  {userData.map((element, i) => {
-    return (
-      <tr key={i}>
-        <td>{i}</td>
-        <td>{element.arms.left_hand.width.toFixed(2)} / {element.arms.left_hand.height.toFixed(2)}</td>
-        <td>{element.arms.left_lower_arm_back.width.toFixed(2)} / {element.arms.left_lower_arm_back.height.toFixed(2)}</td>
-        <td>{element.arms.left_lower_arm_front.width.toFixed(2)} / {element.arms.left_lower_arm_front.height.toFixed(2)}</td>
-        <td>{element.arms.left_upper_arm_back.width.toFixed(2)} / {element.arms.left_upper_arm_back.height.toFixed(2)}</td>
-        <td>{element.arms.left_upper_arm_front.width.toFixed(2)} / {element.arms.left_upper_arm_front.height.toFixed(2)}</td>
-      </tr>
-    )
-  })}
-  </tbody>
-</table>
-</div>
+            <div className='card-temp'>
+            <p className='table-title'>Right Arm Measurements</p>
+            <table className="table table-striped">
+              <thead className="thead-dark">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">{'Hand [cm]'}</th>
+                  <th scope="col">{'Lower Arm Back [cm]'}</th>
+                  <th scope="col">{'Lower Arm Front [cm]'}</th>
+                  <th scope="col">{'Upper Arm Back [cm]'}</th>
+                  <th scope="col">{'Upper Arm Front [cm]'}</th>
+                </tr>
+              </thead>
+              <tbody>
+              {userData.map((element, i) => {
+                return (
+                  <tr key={i}>
+                    <td>{i}</td>
+                    <td>{element.arms.right_hand.width.toFixed(2)} / {element.arms.right_hand.height.toFixed(2)}</td>
+                    <td>{element.arms.right_lower_arm_back.width.toFixed(2)} / {element.arms.right_lower_arm_back.height.toFixed(2)}</td>
+                    <td>{element.arms.right_lower_arm_front.width.toFixed(2)} / {element.arms.right_lower_arm_front.height.toFixed(2)}</td>
+                    <td>{element.arms.right_upper_arm_back.width.toFixed(2)} / {element.arms.right_upper_arm_back.height.toFixed(2)}</td>
+                    <td>{element.arms.right_upper_arm_front.width.toFixed(2)} / {element.arms.left_upper_arm_front.height.toFixed(2)}</td>
+                  </tr>
+                )
+              })}
+              </tbody>
+            </table>
+            </div>
 
-<div className='card-temp'>
-<p className='table-title'>Right Arm Measurements</p>
-<table className="table table-striped">
-  <thead className="thead-dark">
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">{'Hand [cm]'}</th>
-      <th scope="col">{'Lower Arm Back [cm]'}</th>
-      <th scope="col">{'Lower Arm Front [cm]'}</th>
-      <th scope="col">{'Upper Arm Back [cm]'}</th>
-      <th scope="col">{'Upper Arm Front [cm]'}</th>
-    </tr>
-  </thead>
-  <tbody>
-  {userData.map((element, i) => {
-    return (
-      <tr key={i}>
-        <td>{i}</td>
-        <td>{element.arms.right_hand.width.toFixed(2)} / {element.arms.right_hand.height.toFixed(2)}</td>
-        <td>{element.arms.right_lower_arm_back.width.toFixed(2)} / {element.arms.right_lower_arm_back.height.toFixed(2)}</td>
-        <td>{element.arms.right_lower_arm_front.width.toFixed(2)} / {element.arms.right_lower_arm_front.height.toFixed(2)}</td>
-        <td>{element.arms.right_upper_arm_back.width.toFixed(2)} / {element.arms.right_upper_arm_back.height.toFixed(2)}</td>
-        <td>{element.arms.right_upper_arm_front.width.toFixed(2)} / {element.arms.left_upper_arm_front.height.toFixed(2)}</td>
-      </tr>
-    )
-  })}
-  </tbody>
-</table>
-</div>
+            <div className='card-temp'>
+              <p className='table-title'>Left Leg Measurements</p>
+            <table className="table table-striped">
+              <thead className="thead-dark">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">{'Foot [cm]'}</th>
+                  <th scope="col">{'Lower Leg Front [cm]'}</th>
+                  <th scope="col">{'Upper Leg Front [cm]'}</th>
+                </tr>
+              </thead>
+              <tbody>
+              {userData.map((element, i) => {
+                return (
+                  <tr key={i}>
+                    <td>{i}</td>
+                    <td>{element.legs.left_foot.width.toFixed(2)} / {element.legs.left_foot.height.toFixed(2)}</td>
+                    <td>{element.legs.left_lower_leg_front.width.toFixed(2)} / {element.legs.left_lower_leg_front.height.toFixed(2)}</td>
+                    <td>{element.legs.left_upper_leg_front.width.toFixed(2)} / {element.legs.left_upper_leg_front.height.toFixed(2)}</td>
+                  </tr>
+                )
+              })}
+              </tbody>
+            </table>
+            </div>
 
-<div className='card-temp'>
-  <p className='table-title'>Left Leg Measurements</p>
-<table className="table table-striped">
-  <thead className="thead-dark">
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">{'Foot [cm]'}</th>
-      <th scope="col">{'Lower Leg Front [cm]'}</th>
-      <th scope="col">{'Upper Leg Front [cm]'}</th>
-    </tr>
-  </thead>
-  <tbody>
-  {userData.map((element, i) => {
-    return (
-      <tr key={i}>
-        <td>{i}</td>
-        <td>{element.legs.left_foot.width.toFixed(2)} / {element.legs.left_foot.height.toFixed(2)}</td>
-        <td>{element.legs.left_lower_leg_front.width.toFixed(2)} / {element.legs.left_lower_leg_front.height.toFixed(2)}</td>
-        <td>{element.legs.left_upper_leg_front.width.toFixed(2)} / {element.legs.left_upper_leg_front.height.toFixed(2)}</td>
-      </tr>
+            <div className='card-temp'>
+            <p className='table-title'>Right Leg Measurements</p>
+            <table className="table table-striped">
+              <thead className="thead-dark">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">{'Foot [cm]'}</th>
+                  <th scope="col">{'Lower Leg Front [cm]'}</th>
+                  <th scope="col">{'Upper Leg Front [cm]'}</th>
+                </tr>
+              </thead>
+              <tbody>
+              {userData.map((element, i) => {
+                return (
+                  <tr key={i}>
+                    <td>{i}</td>
+                    <td>{element.legs.right_foot.width.toFixed(2)} / {element.legs.right_foot.height.toFixed(2)}</td>
+                    <td>{element.legs.right_lower_leg_front.width.toFixed(2)} / {element.legs.right_lower_leg_front.height.toFixed(2)}</td>
+                    <td>{element.legs.right_upper_leg_front.width.toFixed(2)} / {element.legs.right_upper_leg_front.height.toFixed(2)}</td>
+                  </tr>
+                )
+              })}
+              </tbody>
+            </table>
+            </div>
+            </div>
+              : null}
+</div>
     )
-  })}
-  </tbody>
-</table>
-</div>
-
-<div className='card-temp'>
-<p className='table-title'>Right Leg Measurements</p>
-<table className="table table-striped">
-  <thead className="thead-dark">
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">{'Foot [cm]'}</th>
-      <th scope="col">{'Lower Leg Front [cm]'}</th>
-      <th scope="col">{'Upper Leg Front [cm]'}</th>
-    </tr>
-  </thead>
-  <tbody>
-  {userData.map((element, i) => {
-    return (
-      <tr key={i}>
-        <td>{i}</td>
-        <td>{element.legs.right_foot.width.toFixed(2)} / {element.legs.right_foot.height.toFixed(2)}</td>
-        <td>{element.legs.right_lower_leg_front.width.toFixed(2)} / {element.legs.right_lower_leg_front.height.toFixed(2)}</td>
-        <td>{element.legs.right_upper_leg_front.width.toFixed(2)} / {element.legs.right_upper_leg_front.height.toFixed(2)}</td>
-      </tr>
-    )
-  })}
-  </tbody>
-</table>
-</div>
-</div>
-</div>
-      )
-    }
   }
   return (
     <div className={'dashboard page-transition'}>

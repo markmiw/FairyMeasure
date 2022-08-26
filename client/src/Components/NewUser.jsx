@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import fairy from '../assets/photos/fairy.jpeg'
 import axios from 'axios'
+import Captcha from './Captcha.jsx'
+import captcha_icon from '../assets/icons/captcha.svg'
 
 const NewUser = ({ setPage, registered, setLogin, setHumanHeight }) => {
   const [view, setView] = useState('new-user')
@@ -10,7 +12,8 @@ const NewUser = ({ setPage, registered, setLogin, setHumanHeight }) => {
   const [lastName, setLastName] = useState('')
   const [password, setPassword] = useState('')
   const [height, setHeight] = useState(0)
-
+  const [captchaVerified, setCaptchaVerified] = useState(false)
+  const [captchaModal, setCaptchaModal] = useState(false)
   const toggleView = () => {
     setEmail('')
     setPassword('')
@@ -106,17 +109,21 @@ const NewUser = ({ setPage, registered, setLogin, setHumanHeight }) => {
 
   function login (e) {
     e.preventDefault()
-    const params = { params: { username, password } }
-    axios.get('/login', params).then(({ data }) => {
-      if (data) {
-        setLogin(username)
-        setPage('dashboard')
-      } else {
-        alert('incorrect username or password')
-      }
-    }).catch((err) => {
-      console.log(err)
-    })
+    if (captchaVerified) {
+      const params = { params: { username, password } }
+      axios.get('/login', params).then(({ data }) => {
+        if (data) {
+          setLogin(username)
+          setPage('dashboard')
+        } else {
+          alert('incorrect username or password')
+        }
+      }).catch((err) => {
+        console.log(err)
+      })
+    } else {
+      alert('Waifu Captcha needs to be verified')
+    }
   }
 
   return (
@@ -129,6 +136,7 @@ const NewUser = ({ setPage, registered, setLogin, setHumanHeight }) => {
     <form className="login-form">
       <input autoComplete="on" name="username" onChange={(e) => setUsername(e.target.value)} type="text" placeholder="username"/>
       <input autoComplete="on" name="password" onChange={(e) => setPassword(e.target.value)} type="password" placeholder="password"/>
+      <Captcha captchaVerified={captchaVerified} setCaptchaVerified={setCaptchaVerified}/>
       <button onClick={(e) => login(e)}>login</button>
       <p className="message">Not registered? <a className='hover' onClick={toggleView}>Create an account</a></p>
     </form>
